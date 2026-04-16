@@ -1,0 +1,26 @@
+"""
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+<table>
+<tr>
+    <th>Title</th>
+    <th>Amount</th>
+    <th>Category</th>
+    <th>Action</th>
+</tr>
+{% for e in expenses %}
+<tr>
+    <td>{{ e[1] }}</td>
+    <td>{{ e[2] }}</td>
+    <td>{{ e[3] }}</td>
+    <td>
+    <a href="/edit/{{ e[0] }}" class="btn edit-btn">Edit</a>
+    <a href="/delete/{{ e[0] }}" class="btn delete-btn">Delete</a>
+</td>
+</tr>
+{% endfor %}
+</table>
+</div>
+{% endblock %}
+"""
