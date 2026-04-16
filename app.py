@@ -4,9 +4,13 @@ import sqlite3
 
 app = Flask(__name__)
 
+import os
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, 'expenses.db')
+
 # Initialize DB
 def init_db():
-    conn = sqlite3.connect('expenses.db')
+    conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute('''CREATE TABLE IF NOT EXISTS expenses (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -19,7 +23,7 @@ def init_db():
 
 @app.route('/')
 def index():
-    conn = sqlite3.connect('expenses.db')
+    conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute("SELECT * FROM expenses")
     data = cur.fetchall()
@@ -33,7 +37,7 @@ def add():
         amount = request.form['amount']
         category = request.form['category']
 
-        conn = sqlite3.connect('expenses.db')
+        conn = sqlite3.connect(DB_PATH)
         cur = conn.cursor()
         cur.execute("INSERT INTO expenses (title, amount, category) VALUES (?, ?, ?)",
                     (title, amount, category))
@@ -45,7 +49,7 @@ def add():
 
 @app.route('/delete/<int:id>')
 def delete(id):
-    conn = sqlite3.connect('expenses.db')
+    conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute("DELETE FROM expenses WHERE id=?", (id,))
     conn.commit()
@@ -54,7 +58,7 @@ def delete(id):
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
-    conn = sqlite3.connect('expenses.db')
+    conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
 
     if request.method == 'POST':
@@ -81,7 +85,7 @@ def edit(id):
 
 @app.route('/analytics')
 def analytics():
-    conn = sqlite3.connect('expenses.db')
+    conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute("SELECT category, amount FROM expenses")
     data = cur.fetchall()
